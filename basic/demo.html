@@ -1,0 +1,66 @@
+<!DOCTYPE <!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <title>vue简单应用</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <!-- 开发环境版本，包含了有帮助的命令行警告 -->
+    <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+</head>
+<body>
+    <div id="app">
+        <button v-if="showBtn" v-on:click="handleClick">click me</button>
+        <div class="list-wrapper" v-if="showList" v-bind:['foo'+attributeName]="name">
+            <ol>
+                <list v-for="(item,index) in items" :key="index" :item="item">
+                </list>
+            </ol>
+        </div>
+        <div class="meg-wrapper" v-if="showMsg">
+            <p>{{test()}}</p>
+            <button @click="reverseMessage">反转消息</button>
+            <input v-model="message">
+        </div>
+    </div>
+    <script>
+        Vue.component('list', {
+            props:{
+                item:{
+                    required:true
+                }
+            },
+            template: '<li>{{item}}</li>'
+        })
+        //import Vue from 'https://cdn.jsdelivr.net/npm/vue@2.6.11/dist/vue.esm.browser.js';
+        var app = new Vue({
+            el:'#app',
+            data:{
+                name: 'list',
+                attributename:'name',
+                showBtn: false,
+                showList: true,
+                showMsg:true,
+                items: ['jeck', 'tom', 'jane'],
+                message:'Hello Vue.js!'
+            },
+            //template:'<div class="list-wrapper" v-if="showList"><ol><list v-for="(item,index) in items" :key="index" :item="item"></list></ol></div>',
+            methods:{
+                handleClick() {
+                    console.log('clicked');
+                },
+                reverseMessage(){
+                    this.message = this.message.split('').reverse().join('')
+                },
+                test(){
+                    return Date.now();
+                }
+            }, 
+            created(){
+                console.log('data:',this.$data,'$el:',this.$el)
+            },
+        });
+        console.log(app)
+    </script>
+</body>
+</html>

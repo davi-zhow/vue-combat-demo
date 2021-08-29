@@ -1,0 +1,63 @@
+<!DOCTYPE <!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <title>vue计算属性演示demo</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <!-- 开发环境版本，包含了有帮助的命令行警告 -->
+    <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+</head>
+<body>
+    <div id="app">
+        <div>{{revertMsg}}</div>
+        <div>{{dateTime()}}</div>
+    </div>
+    <script>
+        var obj = {
+            message:'hello world'
+            }
+        var app = new Vue({
+            el:'#app',
+            data:obj,
+            methods:{
+                dateTime() {
+                    return Date.now();
+                }
+            },
+            computed:{
+                revertMsg(){
+                    return this.message.split('').reverse().join('');
+                }
+            },
+            beforeCreate(){
+                console.log('call beforeCreate data:',JSON.stringify(this.$data),'$el:' + this.$el)
+            },
+            created(){
+                console.log('call created data:',JSON.stringify(this.$data),'$el:' + this.$el)
+            },
+            beforeMount(){
+                console.log('call beforeMount data:',JSON.stringify(this.$data),'$el:' + this.$el,'id:' + this.$el.getAttribute('id'))
+            },
+            mounted(){
+                console.log('call mounted data:',JSON.stringify(this.$data),'$el:' + this.$el)
+            },
+            beforeUpdate(){
+                console.log('call beforeUpdate data:',JSON.stringify(this.$data),'$el:' + this.$el)
+            },
+            updated(){
+                console.log('call updated data:',JSON.stringify(this.$data),'$el:' + this.$el)
+            },
+            beforeDestroy(){
+                console.log('call beforeDestroy data:',JSON.stringify(this.$data),'$el:' + this.$el)
+            },
+            destroyed(){
+                console.log('call destroyed data:',JSON.stringify(this.$data),'$el:' + this.$el)
+            }
+
+
+        });
+        console.log(app)
+    </script>
+</body>
+</html>

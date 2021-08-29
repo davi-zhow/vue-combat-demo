@@ -1,0 +1,182 @@
+<!DOCTYPE <!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <title>作用域slot示例</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <!-- 开发环境版本，包含了有帮助的命令行警告 -->
+    <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+</head>
+<body>
+    <div id="app">
+        <my-list :books="books" v-if="isshow">  
+            <!-- 作用域插槽也可以是具名的solt -->
+            <template slot="book" slot-scope="props">
+                <li>{{ props.bookName }}</li>
+            </template>
+        </my-list>
+        <child-component>
+            <h2 slot="header">标题</h2>
+            <p>正文内容</p>
+            <p>更多的正文内容</p>
+            <div class="footer-content" slot="footer">
+                底部信息
+            </div>
+        </child-component>
+    </div>
+    <script>
+        Vue.component('my-list', (resolve) => {
+            setTimeout(() => {   
+                resolve({
+                    props: {
+                        books: {
+                            type: Array,
+                            default: function () {
+                                return [];
+                            }
+                        }
+                    },
+                    template: `
+                        <ul>
+                            <slot name="book"
+                                v-for="book in books"
+                                :book-name="book.name">
+                                <li> {{book.name + '默认'}}</li>
+                            </slot>
+                        </ul>`,
+                    beforeCreate () {
+                        console.log('my-list component beforeCreate');
+                        console.log('this.$data', this.$data);
+                        console.log('this.$el', this.$el);
+                    },
+                    created () {
+                        console.log('my-list component created');
+                        console.log('this.$data', this.$data);
+                        console.log('this.$el', this.$el);
+                    },
+                    beforeMounte () {
+                        console.log('my-list component beforeMounte');
+                        console.log('this.$data', this.$data);
+                        console.log('this.$el', this.$el);
+                    },
+                    mounted () {
+                        console.log('my-list component mounted')
+                        console.log('my-list component instance', this);
+                        console.log('this.$parent', this.$parent);
+                        console.log('this.$data', this.$data);
+                        console.log('this.$el', this.$el);
+                        console.log('this.$scopedSlots',this.$scopedSlots.book)
+                    },
+                    beforeUpdate () {
+                        console.log('my-list component beforeUpdate');
+                        console.log('this.$data', this.$data);
+                        console.log('this.$el', this.$el);
+                    },
+                    updated () {
+                        console.log('my-list component updated');
+                        console.log('this.$data', this.$data);
+                        console.log('this.$el', this.$el);
+
+                    },
+                    beforeDestroy () {
+                        console.log('my-list component beforeDestroy');
+                        console.log('this.$data', this.$data);
+                        console.log('this.$el', this.$el);
+                    },
+                    destroyed () {
+                        console.log('my-list component destroyed');
+                        console.log('this.$data', this.$data);
+                        console.log('this.$el', this.$el);
+
+                    }
+
+                });
+            }, 500) ;
+        });
+        Vue.component('child-component', {
+            template: `
+                <div class="container">
+                    <div class="header">
+                        <slot name="header"></slot>
+                    </div>
+                    <div class="main">
+                        <slot></slot>
+                    </div>
+                    <div class="footer">
+                        <slot name="footer"></slot>
+                    </div>
+                </div>
+            `,
+            mounted () {
+                var header = this.$slots.header;
+                var content = this.$slots.default;
+                var footer = this.$slots.footer;
+                console.log('child-component mounted');
+                console.log('child-component slots.header', header);
+                console.log('child-component slots.default', content);
+                console.log('child-component slots.footer', footer);
+
+            }
+        })
+        var app = new Vue({
+            el: '#app',
+            data: {
+                books :[
+                    {name: '《Vue.js 实战》'},
+                    {name: '《Javascript 语言精粹》'},
+                    {name: '《Javascriopt 高级程序设计》'}
+                ],
+                isshow: true
+            },
+            beforeCreate () {
+                console.log('root  beforeCreate');
+                console.log('this.$data', this.$data);
+                console.log('this.$el', this.$el);
+            },
+            created () {
+                console.log('root  created');
+                console.log('this.$data', this.$data);
+                console.log('this.$el', this.$el);
+            },
+            beforeMounte () {
+                console.log('root  beforeMounte');
+                console.log('this.$data', this.$data);
+                console.log('this.$el', this.$el);
+            },
+            mounted () {
+                console.log('root  mounted')
+                console.log('root instance', this);
+                console.log('this.$children', this.$children)
+                console.log('this.$slots',this.$slots)
+                console.log('this.$parent', this.$parent);
+                console.log('this.$data', this.$data);
+                console.log('this.$el', this.$el);
+            },
+            beforeUpdate () {
+                console.log('root  beforeUpdate');
+                console.log('this.$data', this.$data);
+                console.log('this.$el', this.$el);
+            },
+            updated () {
+                console.log('root  updated');
+                console.log('this.$data', this.$data);
+                console.log('this.$el', this.$el);
+
+            },
+            beforeDestroy () {
+                console.log('root  beforeDestroy');
+                console.log('this.$data', this.$data);
+                console.log('this.$el', this.$el);
+            },
+            destroyed () {
+                console.log('root  destroyed');
+                console.log('this.$data', this.$data);
+                console.log('this.$el', this.$el);
+
+            }
+
+        })
+    </script>
+</body>
+</html>

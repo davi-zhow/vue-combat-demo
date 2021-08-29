@@ -1,0 +1,101 @@
+<!DOCTYPE <!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <title>vue简单应用</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <!-- 开发环境版本，包含了有帮助的命令行警告 -->
+    <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+</head>
+<body>
+    <div id="app">
+        <!--  -->
+        <keep-alive>
+
+            <component :is="currentView" :name="name"></component>
+        </keep-alive>
+        <button @click="handleChangeView('A')">切换到A组件</button>
+        <button @click="handleChangeView('B')">切换到B组件</button>
+        <button @click="handleChangeView('C')">切换到C组件</button>
+    </div>
+    <script>
+        
+        var app = new Vue({
+            el:'#app',
+            components: {
+                comA: {
+                    template: '<div>{{value}}</div>',
+                    props: ['name'],
+                    data () {
+                        return {
+                            value: this.name
+                        }
+                    },
+                    mounted () {
+                        console.log('组件A mounted')
+                        this.value = this.value + Date.now();
+                    },
+                    updated () {
+
+                        console.log('组件A updated')
+                    },
+                    activated () {
+                        console.log('组件A active')
+                    },
+                    deactivated () {
+                        console.log('组件A deactive')
+                    }
+                },
+                comB: {
+                    template: '<div>{{value}}</div>',
+                    props: ['name'],
+                    data () {
+                        return {
+                            value: this.name
+                        }
+                    },
+                    mounted () {
+                        console.log('组件B mounted')
+                        this.value = this.value + Date.now();
+                    },
+                    updated () {
+
+                        console.log('组件B updated')
+                    }
+                },
+                comC: {
+                    template: '<div>{{value}}</div>',
+                    props: ['name'],
+                    data () {
+                        return {
+                            value: this.name
+                        }
+                    },
+                    mounted () {
+                        console.log('组件C mounted')
+                        this.value = this.value + Date.now();
+                    },
+                    updated () {
+
+                        console.log('组件C updated')
+                    }
+                }
+
+            },
+            data: {
+                currentView: 'comA',
+                name: '切换到组件A'
+
+            },
+            methods: {
+                handleChangeView (component) {
+                    this.currentView = 'com' + component;
+                    this.name = '切换到组件' + component;
+                }
+            }
+        });
+        console.log(app)
+    </script>
+</body>
+</html>

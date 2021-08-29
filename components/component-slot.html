@@ -1,0 +1,63 @@
+<!DOCTYPE <!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <title>vue简单应用</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <!-- 开发环境版本，包含了有帮助的命令行警告 -->
+    <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+    <style>
+        .alert-box{position:absolute;width: 500px;height:300px;left:50%;top:50%;margin-top:-150px;margin-left:-250px;border:#ddd solid 1px;box-shadow: #333 5px 5px 20px;display: flex;flex-direction: column;}
+        .alert-box-title{background:#ddd;overflow:hidden;display:flex;flex-flow:row nowrap;justify-content: space-between;}
+        .alert-box-title-text,.alert-box-title-close{height:30px;line-height:30px;display:inline-block;vertical-align:middle;}
+        .alert-box-title-close{width:30px;text-align: center;cursor: pointer;flex-basis: 30px;flex-shrink: 1;vertical-align: top;}
+        .alert-box-content-wrap{flex:1;}
+        .alert-box-content{width:100%;height:100%;display:flex;align-items: center;justify-content:center;text-align:center;}
+    </style>
+</head>
+<body>
+    <div id="app">
+        <alert-box :title="alertTitle" :value="alertContent">
+            cao ni ma 
+        </alert-box>
+    </div>
+    <script>
+        Vue.component('alert-box',{
+            props: ['title', 'value'],
+            template: `<div class="alert-box">
+                            <div class="alert-box-title">
+                                <span class="alert-box-title-text">{{title}}</span>
+                                <span class="alert-box-title-close">X</span>
+                            </div>
+                            <div class="alert-box-content-wrap">
+                                <div class="alert-box-content">
+                                {{value}}
+                                <slot></slot>
+                                </div>
+                            </div>
+                        </div>`,
+            methods: {
+                remove() {
+                    this.$emit("remove");
+                }
+            }
+        })
+        
+        var app = new Vue({
+            el:'#app',
+            data:{
+                alertTitle:'卧槽，测试一下',
+                alertContent: '卧槽成功了耶，真他妈不敢相信'
+            },
+            methods:{
+                
+            }, 
+            created(){
+                console.log('data:',this.$data,'$el:',this.$el)
+            },
+        });
+        console.log(app)
+    </script>
+</body>
+</html>

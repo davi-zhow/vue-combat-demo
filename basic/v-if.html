@@ -1,0 +1,95 @@
+<!DOCTYPE <!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <title>vue if指令演示demo</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <!-- 开发环境版本，包含了有帮助的命令行警告 -->
+    <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+</head>
+<body>
+    <div id="app">
+        <input v-model='question' type="text">
+        <template v-if='question.indexOf("？") > -1'>
+            <div>请稍等，先和你确认下你的提问</div>
+            <div>您提问的问题是：{{question}}</div>
+            
+        </template>
+        <template v-else-if='question'>
+                <div>请稍等，先和你确认下你的提问</div>
+                <div>您提问的问题是：{{question}}吗？</div>
+                
+        </template>
+        <div v-else>
+            请先输入你的问题！
+        </div>
+        <template v-if="loginType==='username'">
+            <label>Username</label>
+            <input placeholder="Enter your username" key="username">
+        </template>
+        <template v-else>
+            <label>Email</label>
+            <input placeholder="Enter your email address" key="Email">
+        </template>
+        <h2>v-show 演示demo</h2>
+        <div v-show="loginType === 'username'">
+            <label>Username</label>
+            <input placeholder="Enter your username" key="username">
+        </div>
+        <div v-show="loginType === 'email'">
+            <label>Email</label>
+            <input placeholder="Enter your email address" key="Email">
+        </div>
+        <button @click='toggle'>toggle login type</button>
+    </div>
+    <script>
+        var obj = {
+            question:'',
+            loginType:'username'
+            }
+        var app = new Vue({
+            el:'#app',
+            data:obj,
+            methods:{
+                toggle(){
+                    if(this.loginType === 'username') {
+                        this.loginType = 'email';
+                    } else{
+                        this.loginType = 'username';
+                    }
+                }
+            },
+            computed:{
+            },
+            beforeCreate(){
+                console.log('call beforeCreate data:',JSON.stringify(this.$data),'$el:' + this.$el)
+            },
+            created(){
+                console.log('call created data:',JSON.stringify(this.$data),'$el:' + this.$el)
+            },
+            beforeMount(){
+                console.log('call beforeMount data:',JSON.stringify(this.$data),'$el:' + this.$el,'id:' + this.$el.getAttribute('id'))
+            },
+            mounted(){
+                console.log('call mounted data:',JSON.stringify(this.$data),'$el:' + this.$el)
+            },
+            beforeUpdate(){
+                console.log('call beforeUpdate data:',JSON.stringify(this.$data),'$el:' + this.$el)
+            },
+            updated(){
+                console.log('call updated data:',JSON.stringify(this.$data),'$el:' + this.$el)
+            },
+            beforeDestroy(){
+                console.log('call beforeDestroy data:',JSON.stringify(this.$data),'$el:' + this.$el)
+            },
+            destroyed(){
+                console.log('call destroyed data:',JSON.stringify(this.$data),'$el:' + this.$el)
+            }
+
+
+        });
+        console.log(app)
+    </script>
+</body>
+</html>

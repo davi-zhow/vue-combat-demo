@@ -1,0 +1,49 @@
+<!DOCTYPE <!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <title>vue简单应用</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <!-- 开发环境版本，包含了有帮助的命令行警告 -->
+    <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+</head>
+<body>
+    <div id="app">
+        <input type="radio" id="one" value="one" v-model="checkedVal" >
+        <label for="one">one</label>
+        <!-- <input type="radio" id="two" value="two" v-model="checkedVal">
+        <label for="two">two</label>
+        <input type="radio" id="three" value="three" v-model="checkedVal">
+        <label for="three">three</label>
+        <input type="radio" id="four" value="four" v-model="checkedVal">
+        <label for="four">four</label> -->
+        <div>{{checkedVal}}</div>
+        <h3>selector 演示demo</h3>
+        <select v-model="selectVal" multiple>
+            <option disabled value="">请选择</option>
+            <option>A</option>
+            <option>B</option>
+            <option>C</option>
+            <option>D</option>
+        </select>
+        <div >selector value:{{selectVal}}</div>
+    </div>
+    <script>
+        
+        var app = new Vue({
+            el:'#app',
+            data:{
+                checkedVal:'one',
+                selectVal: ['B']
+            },
+            methods:{
+                
+            }, 
+            created(){
+                console.log('data:',this.$data,'$el:',this.$el)
+            },
+        });
+    </script>
+</body>
+</html>

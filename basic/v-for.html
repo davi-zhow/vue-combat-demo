@@ -1,0 +1,111 @@
+<!DOCTYPE <!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <title>vue简单应用</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <!-- 开发环境版本，包含了有帮助的命令行警告 -->
+    <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+</head>
+<body>
+    <div id="app">
+        <form v-on:submit.prevent="addNewTodo">
+            <label for="new-todo">Add a todo</label>
+            <input
+                v-model="newTodoText"
+                id="new-todo"
+                placeholder="E.g. Feed the cat"
+            >
+            <input
+                v-model="newTodoValue"
+                id="new-todo-price"
+                placeholder="请输入价格"
+                type="number"
+            >
+            <button>Add</button>
+        </form>
+        <ul>
+            <li
+                is="todo-item"
+                v-for="(todo, index) in todos"
+                v-bind:key="todo.id"
+                v-bind:value="todo.value"
+                v-bind:title="todo.title"
+                v-on:remove="todos.splice(index, 1)"
+            ></li>
+        </ul>
+        <input is="text-input" :placeholder="placeholder" v-model="totalPrice"/>
+        <div>{{totalPrice}}</div>
+    </div>
+    <script>
+        Vue.component('todo-item',{
+            props: ['title', 'value'],
+            template: '<li><span>{{title + "&nbsp;" +  value}}</span><button @click.prevent="remove">remove</button></li>',
+            methods: {
+            }
+        })
+        Vue.component('text-input',{
+            props: ['placeholder','value'],
+            template: '<div><input type="text" @input="input(\'you lovely dady comming\', $event)" :value="value" :placeholder="placeholder"/><span>{{value}}</span></div>',
+            computed:{
+                // priceValue:{
+                //     get() {
+                //         return this.value;
+                //     },
+                //     set(value) {
+                //         this.$emit('input',value)
+                //     }
+                // }
+            },
+            methods: {
+                input(data,e){
+                    console.log(e);
+                    console.log(e.target.value)
+                    console.log(data);
+                    this.$emit('input', e.target.value);
+                },
+                remove() {
+                    this.$emit("remove");
+                }
+            }
+        })
+        var app = new Vue({
+            el:'#app',
+            data:{
+                totalPrice:0,
+                newTodoText: '',
+                newTodoValue:0,
+                items: [
+                    {id:1, name:'apple', price: 28},
+                    {id:2, name:'orange', price: 30},
+                    {id:3, name:'banana', price: 18},
+                    {id:4, name:'grape', price: 45},
+                    {id:5, name:'pear', price: 13},
+                    {id:6, name:'peach', price: 23}
+                ],
+                todos: [
+                    {id: 1, title: '华为', value: 2000},
+                    {id: 2, title: 'apple', value: 3000},
+                    {id: 3, title: 'oppo', value: 15000},
+                    {id: 4, title: '小米', value: 2000},
+                ],
+                nextTodoId: 5,
+                placeholder:'请输入信息'
+            },
+            methods:{
+                addNewTodo() {
+                    if(!this.newTodoText) return;
+
+                    let item = {id: this.nextTodoId++, title: this.newTodoText,value:this.newTodoValue}
+                    this.todos.push(item);
+                }
+            }, 
+            created(){
+                console.log('data:',this.$data,'$el:',this.$el)
+            },
+        });
+        console.log(app)
+    </script>
+</body>
+</html>

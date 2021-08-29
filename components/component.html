@@ -1,0 +1,118 @@
+<!DOCTYPE <!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <title>vue简单应用</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <!-- 开发环境版本，包含了有帮助的命令行警告 -->
+    <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+</head>
+<body>
+    <div id="app">
+        <!--  -->
+    </div>
+    <script>
+        Vue.component('todo-item',{
+            props: ['title', 'value'],
+            template: '<li><span>{{title + value}}</span><button @click.prevent="remove">remove</button></li>',
+            methods: {
+                remove () {
+                    this.$emit                                                                                                                                                                                                                                                                                          -("remove");
+                }
+            }
+        })
+        Vue.component('text-input',{
+            props: ['placeholder','value'],
+            template: '<div><input type="text" :placeholder="placeholder"/><span>{{value}}</span></div>',
+            methods: {
+                remove () {
+                    this.$emit("remove");
+                }
+            }
+        });
+        vue.component('ele', {
+            render: function (createElement) {
+                function cloneVNode (vnode) {
+                    // 递归遍历所有子节点，并克隆
+                    const cloneChildren = vnode.children && vnode.children.map(function (vnode) {
+                        return cloneVNode(vnode);
+                    });
+                    const cloned = createElement(
+                        vnode.tag,
+                        vnode.data,
+                        cloneChildren
+                    );
+                    cloned.text = vnode.text;
+                    cloned.isComment = vnode.isComment;
+                    cloned.componentOptions = vnode.componentOptions;
+                    cloned.elm = vnode.elm;
+                    cloned.context = vnode.context;
+                    cloned.ns = vnode.ns;
+                    cloned.isStatic = vnode.isStatic;
+                    cloned.key = vnode.key;
+                    
+                    return cloned;
+                }
+    
+            }
+        }
+        )
+        var app = new Vue({
+            el:'#app',
+            render(createElement){
+                let itemDomList = [];
+                this.todos.forEach((element, index) => {
+                    itemDomList.push(createElement ('todo-item', {
+                        props: {
+                            title: element.title,
+                            value: element.value
+                        },
+                        on:{
+                            remove:() => {
+                                this.todos.splice(index, 1)
+                            }
+                        },
+                        key:element.id
+                    })); 
+                });
+                return createElement('div',[
+                    createElement('ul',itemDomList)
+                ])
+            },
+            data:{
+                searchText: '',
+                newTodoText: '',
+                items: [
+                    {id:1, name:'apple', price: 28},
+                    {id:2, name:'orange', price: 30},
+                    {id:3, name:'banana', price: 18},
+                    {id:4, name:'grape', price: 45},
+                    {id:5, name:'pear', price: 13},
+                    {id:6, name:'peach', price: 23}
+                ],
+                todos: [
+                    {id: 1, title: '华为', value: 2000},
+                    {id: 2, title: 'apple', value: 3000},
+                    {id: 3, title: 'oppo', value: 15000},
+                    {id: 4, title: '小米', value: 2000},
+                ],
+                nextTodoId: 5,
+                placeholder:'请输入信息'
+            },
+            methods:{
+                addNewTodo() {
+                    if(!this.newTodoText) return;
+
+                    let item = {id: this.nextTodoId++, title: this.newTodoText}
+                    this.todos.push(item);
+                }
+            }, 
+            created(){
+                console.log('data:',this.$data,'$el:',this.$el)
+            },
+        });
+        console.log(app)
+    </script>
+</body>
+</html>

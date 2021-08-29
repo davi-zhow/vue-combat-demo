@@ -1,0 +1,215 @@
+<!DOCTYPE <!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <title>vue 递归组件</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <!-- 开发环境版本，包含了有帮助的命令行警告 -->
+    <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+</head>
+<body>
+    <div id="app">
+        <areas-selector :data="data" v-model="selectArea"></areas-selector>
+    </div>
+    <script>
+        var areaDatas = [
+            {name: "江苏", code: "1000", parentCode: ""},
+            {name: "南京", code:"10000001", parentCode: "1000"},
+            {name: "建邺区", code:"100000010001", parentCode: "10000001"},
+            {name: "江宁区", code:"100000010002", parentCode: "10000001"},
+            {name: "苏州", code:"10000002", parentCode: "1000"},
+            {name: "姑苏区", code:"100000020001", parentCode: "10000002"},
+            {name: "虎丘区", code:"100000020002", parentCode: "10000002"},
+
+            {name: "浙江", code: "1001", parentCode: ""},
+            {name: "杭州", code: "10010001", parentCode: "1001"},
+            {name: "上城区", code: "100100010001", parentCode: "10010001"},
+            {name: "滨江区", code: "100100010002", parentCode: "10010001"},
+            {name: "湖州", code: "10010002", parentCode: "1001"},
+            {name: "吴兴区", code: "100100020001", parentCode: "10010002"},
+            {name: "南浔区", code: "100100020002", parentCode: "10010002"}
+        ]
+        Vue.component('areas-selector', {
+            props: {
+                value: {
+                    type: Array,
+                    default () {
+                        return [];
+                    }
+                },
+                data: {
+                    type: Array,
+                    default () {
+                        return [];
+                    }
+                }
+            },
+            data () {
+                return {
+                    isShowDropdown: false,
+                    //selectedText
+                }
+            },
+            computed : {
+                selectedText () {
+                    let text = [];
+                    let selectItems = this.data.filter((item) => {
+                        return this.value.includes(item.code)
+                    });
+                    selectItems.forEach(element => {
+                        text.push(element.name);
+                    });
+                    return text.join("/")
+                },
+                items () {
+                    let genrateArr = [];
+                    this.data.forEach(element => {
+                        if (element.parentCode === '') {
+                            let genrateItem = Object.assign({}, element);
+                            this.FormatItem(genrateItem);
+                            genrateArr.push(genrateItem);
+                        }
+                    });
+                    return genrateArr;
+                }
+            },
+
+            template: `
+                <div class="areas-selector">
+                        <div class="areas-input-wrap" @click="triggleDrapdownSelector">
+                            <input type="text" :value="selectedText" readonly />
+                        </div>
+                        <div class="areas-selector-dropdown" v-show="isShowDropdown && data.length > 0">
+                            <areas-list :items="items" :selectedCode="value" @on-select-change="handleSelectChange"></areas-list>
+                        </div>
+                </div>
+            `,
+            methods: {
+                triggleDrapdownSelector () {
+                    this.isShowDropdown = !this.isShowDropdown;
+                },
+                handleSelectChange (items) {
+                    let selectedCode = items.map(item => {
+                        return item.code;
+                    })
+                    this.isShowDropdown = false;
+                    this.$emit('input', selectedCode);
+
+                },
+
+                FormatItem (item) {
+                    let genrateArr = [];
+                    this.data.forEach(i => {
+                        if (i.parentCode === item.code) {
+                            let genrateItem = Object.assign({}, i);
+                            this.FormatItem(genrateItem);
+                            genrateArr.push(genrateItem);
+                        }
+                    });
+                    if (genrateArr.length >0){
+                        item.children = genrateArr;
+                    }
+
+                }  
+            },
+
+        })
+        Vue.component('areas-list', {
+            props: {
+                items : {
+                    type: Array,
+                    default () {
+                        return [];
+                    }
+                },
+                selectedCode: {
+                    type: Array,
+                    default () {
+                        return [];
+                    }
+                }
+            },
+            data () {
+                let childSelectedCode = this.selectedCode.length > 0 ? this.selectedCode.slice(1) : [];
+                return {
+                    childItems: [],
+                    selectedItem: this.getSelectItem(this.selectedCode),
+                    childSelectedCode
+                }
+            },
+            template: `
+                <div class="area-wrap">
+                    <ul class="area-list">
+                        <li :class="getItemClass(item)" v-for="item in items" :key="item.code">
+                            <a href="javascript:void(0)" class="area-list-item-target" @click="handleTargetClick(item)">{{item.name}}</a>
+                        </li>
+                    </ul>
+                    <areas-list v-if="childItems.length > 0" :selectedCode="childSelectedCode" :items="childItems" @on-select-change="handleSelectChange"></areas-list>
+                </div>
+            `,
+            methods: {
+                handleTargetClick (item) {
+                    this.selectedItem = item;
+                    if (!item.children || item.children.length === 0) {
+                        this.childItems = [];
+                        this.$emit('on-select-change', [item]);
+                        return;
+                    }
+                    this.childItems = item.children;
+                },
+                handleSelectChange (items) {
+                    items.unshift(this.selectedItem);
+                    this.$emit('on-select-change', items);
+
+                },
+                getSelectItem (selectedCode) {
+                    let selectedItem = {}
+                    if (selectedCode.length > 0) {
+                        this.items.forEach(item => {
+                            if(item.code === selectedCode[0]) {
+                                selectedItem = item;
+                            }
+                        });
+                    }
+
+                    return selectedItem
+                },
+                getItemClass (item) {
+                    return {
+                        'area-list-item': true,
+                        'selected': item.code === this.selectedItem.code 
+                    }
+                }
+            },
+            watch: {
+                selectedCode (value) {
+                    console.log('selectedCode is change');
+                    let childSelectedCode = [];
+                    this.selectedItem = this.getSelectItem(value);
+                    if(value.length > 0) {
+                        this.childSelectedCode = value.slice(1);
+
+                    }
+                }
+            }
+        })
+        var app = new Vue({
+            el:'#app',
+            
+            data: {
+                data:areaDatas,
+                selectArea:[]
+
+            },
+            methods: {
+                handleChangeView (component) {
+                    this.currentView = 'com' + component;
+                    this.name = '切换到组件' + component;
+                }
+            }
+        });
+        console.log(app)
+    </script>
+</body>
+</html>
