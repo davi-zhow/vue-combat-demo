@@ -1,0 +1,42 @@
+<!DOCTYPE <!DOCTYPE html>
+<html lang="zh">
+    <head>
+        <meta charset="utf-8" />
+        <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+        <title>vue简单应用</title>
+        <meta name="viewport" content="width=device-width, initial-scale=1" />
+        <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+    </head>
+
+    <body>
+        <div id="app">
+            <child-component :count="1"> </child-component>
+        </div>
+        <script>
+            Vue.component("child-component", {
+                name: "child-component",
+                props: {
+                    count: {
+                        type: Number,
+                        default: 1,
+                    },
+                    maxCount: {
+                        type: Number,
+                        default: 3,
+                    },
+                },
+                template: `
+                    <div class="child">
+                        <child-component
+                        :count="count + 1"
+                        :maxCount="maxCount"
+                        v-if="count < maxCount"></child-component>
+                    </div>
+                `,
+            });
+            var app = new Vue({
+                el: "#app",
+            });
+        </script>
+    </body>
+</html>

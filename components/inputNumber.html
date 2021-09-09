@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8" />
+        <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <title>数字输入框组件</title>
+    </head>
+    <body>
+        <div id="app">
+            {{value}}
+            <input-number v-model="value" :max="10" :min="0"></input-number>
+        </div>
+        <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+        <script>
+            Vue.component("input-number", {
+                template: `
+                    <div class="input-number">
+                        <input type="text" :value="currentValue" 
+                        @change="handleChange">
+                        <button class="btn reduce" @click="handleDown" :disabled="currentValue <=min">-</button>
+                        <button class="btn add" @click="handleUp" :disabled="currentValue >=max">+</button>
+                    </div>`,
+                props: {
+                    value: {
+                        type: Number,
+                        default: this.val,
+                    },
+                    max: {
+                        type: Number,
+                        default: Infinity,
+                    },
+                    min: {
+                        type: Number,
+                        default: -Infinity,
+                    },
+                },
+                data() {
+                    let val = this.value;
+                    if (val > this.max) val = max;
+                    if (val < min) val = min;
+                    return {
+                        currentValue: val,
+                    };
+                },
+                watch: {
+                    currentValue: function (newValue, oldValue) {
+                        console.log(
+                            `进入currentValue监听,newValue:${newValue},oldValue:${oldValue}`
+                        );
+                        this.$emit("input", newValue);
+                        this.$emit("on-change", newValue);
+                    },
+                    value: function (newValue, oldValue) {
+                        console.log(
+                            `进入value监听,newValue:${newValue},oldValue:${oldValue}`
+                        );
+                        this.updateValue(newValue);
+                    },
+                },
+                methods: {
+                    updateValue: function (val) {
+                        if (val > this.max) val = this.max;
+                        if (val < this.min) val = this.min;
+                        this.currentValue = val;
+                    },
+                    handleDown: function () {
+                        if (this.currentValue <= this.min) {
+                            return;
+                        }
+                        this.currentValue -= 1;
+                    },
+                    handleUp: function () {
+                        if (this.currentValue >= this.max) return;
+                        this.currentValue += 1;
+                    },
+                    handleChange: function (event) {
+                        var val = event.target.value.trim();
+                        var max = this.max;
+                        var min = this.min;
+                        if (isValueNumber(val)) {
+                            val = Number(val);
+                            console.log(val);
+                            this.currentValue = val;
+                            if (val > max) {
+                                this.currentValue = max;
+                            } else if (val < min) {
+                                this.currentValue = min;
+                            }
+                        } else {
+                            event.target.value = this.currentValue;
+                        }
+                    },
+                },
+            });
+            var app = new Vue({
+                el: "#app",
+                data: {
+                    value: 10,
+                },
+            });
+            function isValueNumber(value) {
+                return /(^-?[0-9]+\.{1}\d+$)|(^-?[1-9][0-9]*$)|(^-?0{1}$)/.test(
+                    value + ""
+                );
+            }
+        </script>
+    </body>
+</html>

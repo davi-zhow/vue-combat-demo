@@ -1,0 +1,39 @@
+<!DOCTYPE <!DOCTYPE html>
+<html lang="zh">
+    <head>
+        <meta charset="utf-8" />
+        <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+        <title>vue简单应用</title>
+        <meta name="viewport" content="width=device-width, initial-scale=1" />
+        <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+    </head>
+
+    <body>
+        <div id="app">
+            <child-component inline-template>
+                <div>
+                    <h2>在父组件中定义子组件的模板</h2>
+                    <p>{{message}}</p>
+                    <p>{{msg}}</p>
+                </div>
+            </child-component>
+        </div>
+        <script>
+            Vue.component("child-component", {
+                data: function () {
+                    return {
+                        message: "覆盖父组件",
+                        msg: "在子组件声明的数据",
+                    };
+                },
+            });
+
+            var app = new Vue({
+                el: "#app",
+                data: {
+                    message: "在父组件声明的数据",
+                },
+            });
+        </script>
+    </body>
+</html>

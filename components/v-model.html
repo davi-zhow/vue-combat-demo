@@ -1,0 +1,84 @@
+<!DOCTYPE <!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="utf-8" />
+        <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+        <title>vue简单应用</title>
+        <meta name="viewport" content="width=device-width, initial-scale=1" />
+        <!-- 开发环境版本，包含了有帮助的命令行警告 -->
+        <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+    </head>
+
+    <body>
+        <div id="app">
+            <!--  -->
+            <div id="app">
+                <p>总数：{{total}}</p>
+                <my-component v-model="total"></my-component>
+            </div>
+        </div>
+        <script>
+            Vue.component("my-component", {
+                template: `
+                <div>
+                    <input :value="value" @input="updateValue">
+                    <button @click="handleIncrease">+1</button>
+                    <button @click="handleReduce">-1</button>
+                </div>
+            `,
+                props: {
+                    value: {
+                        type: Number,
+                        default: 0,
+                    },
+                },
+                data: function () {
+                    return {
+                        counter: this.value,
+                    };
+                },
+                watch: {
+                    value(val) {
+                        this.counter = val;
+                    },
+                },
+                methods: {
+                    updateValue(event) {
+                        this.$emit("input", Number(event.target.value));
+                        this.$emit("input", Number(event.target.value));
+                    },
+                    handleIncrease: function () {
+                        this.counter++;
+                        this.$emit("input", this.counter);
+                    },
+                    handleReduce: function () {
+                        this.counter--;
+                        this.$emit("input", this.counter);
+                    },
+                },
+            });
+            var app = new Vue({
+                el: "#app",
+                data: {
+                    total: 4,
+                },
+                mounted() {
+                    this.$on("change", (total) => {
+                        console.log(
+                            `change is called and the value of the params total is ${total}`
+                        );
+                    });
+                },
+                methods: {
+                    handeGetTotal: function (total) {
+                        console.log(
+                            `handleGetTotal is excuted and the param total\`s value is ${total}`
+                        );
+                        this.$emit("change", total);
+                        this.total = total;
+                    },
+                },
+            });
+        </script>
+    </body>
+</html>

@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8" />
+        <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <title>表单focus组件</title>
+    </head>
+    <body>
+        <div id="app">
+            {{value}}
+            <input
+                v-if="show"
+                v-model="value"
+                type="text"
+                v-focus:nnd.nmd="test"
+            />
+        </div>
+        <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+        <script>
+            Vue.directive("focus", {
+                inserted(el, binding, vnode) {
+                    debugger;
+                    console.log("bind callback");
+                    console.log(el, binding, vnode);
+                    //聚焦元素
+                    el.focus();
+                },
+                bind(el, binding, vnode) {
+                    debugger;
+                    console.log("bind callback");
+                    console.log(el, binding, vnode);
+                },
+                update(el, binding, vnode, oldVnode) {
+                    debugger;
+                    console.log("update callback");
+                    console.log(el, binding, vnode);
+                },
+                componentUpdated(el, binding, vnode, oldVnode) {
+                    debugger;
+                    console.log("componentUpdated callback");
+                    console.log(el, binding, vnode);
+                },
+                unbind(el, binding, vnode) {
+                    debugger;
+                    console.log("unbind callback");
+                    console.log(el, binding, vnode);
+                },
+            });
+            var app = new Vue({
+                el: "#app",
+                data: {
+                    value: 10,
+                    show: true,
+                },
+                methods: {
+                    test() {
+                        console.log("我是你爸爸");
+                    },
+                },
+            });
+        </script>
+    </body>
+</html>

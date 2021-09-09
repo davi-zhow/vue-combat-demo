@@ -1,0 +1,25 @@
+<!DOCTYPE <!DOCTYPE html>
+<html lang="zh">
+    <head>
+        <meta charset="utf-8" />
+        <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+        <title>vue简单应用</title>
+        <meta name="viewport" content="width=device-width, initial-scale=1" />
+        <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+    </head>
+
+    <body>
+        <div id="app"></div>
+        <script>
+            Vue.extend({
+                template: "<div>Hello:{{name}}</div>",
+                data: function () {
+                    return {
+                        name: "Aresn",
+                    };
+                },
+            });
+            new MyComponent().$mount("#mount-div");
+        </script>
+    </body>
+</html>
