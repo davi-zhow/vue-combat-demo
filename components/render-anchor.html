@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>表单focus组件</title>
+</head>
+
+<body>
+    <div id="app">
+        <!-- <anchor :level="2" title="特性">特性
+            <text-cmpt></text-cmpt>
+        </anchor> -->
+    </div>
+    <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+    <script>
+        Vue.component('text-cmpt', {
+            template: '<span> 大家好，我是周弘毅</span>'
+        })
+        Vue.component('anchor', {
+            props: {
+                level: {
+                    type: Number,
+                    required: true,
+
+                },
+                title: {
+                    type: String,
+                    default: ''
+                }
+            },
+            render(createElement) {
+                console.log(2)
+                let vNode = createElement('h' + this.level, this.$slots.default);
+                console.log(vNode)
+                return vNode
+            }
+        })
+        var app = new Vue({
+            el: "#app",
+            render(createElement) {
+
+                let vNode = createElement('anchor', {
+                    props: {
+                        level: 2,
+                        title: '特性'
+                    },
+
+                }, [
+                        '特性',
+                        createElement('text-cmpt')
+                    ]);
+                console.log(1)
+                console.log(vNode)
+                return vNode;
+            }
+        });
+    </script>
+</body>
+
+</html>
