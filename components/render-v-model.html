@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8" />
+        <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <title>render函数示例</title>
+    </head>
+
+    <body>
+        <div id="app">
+            <ele></ele>
+        </div>
+        <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+        <script>
+            Vue.component("ele", {
+                render(createElement) {
+                    var _this = this;
+                    console.log("render start");
+                    return createElement("div", [
+                        createElement("input", {
+                            domProps: {
+                                value: this.value,
+                            },
+                            on: {
+                                input(event) {
+                                    _this.value = event.target.value;
+                                },
+                            },
+                        }),
+                        createElement("p", "value:" + this.value),
+                        createElement(
+                            "button",
+                            {
+                                on: {
+                                    click() {
+                                        _this.value = Number(_this.value) + 5;
+                                    },
+                                },
+                                class: {
+                                    foo: true,
+                                },
+                                style: {
+                                    color: "red",
+                                },
+                            },
+                            "+5"
+                        ),
+                    ]);
+                },
+                data() {
+                    return {
+                        value: 2,
+                    };
+                },
+            });
+            var app = new Vue({
+                el: "#app",
+            });
+        </script>
+    </body>
+</html>

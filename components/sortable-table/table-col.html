@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8" />
+        <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <title>可排序的表格组件</title>
+        <style>
+            .vzebra-even {
+                background: red;
+            }
+            .vzebra-odd {
+                background: blue;
+            }
+        </style>
+    </head>
+
+    <body>
+        <table class="table">
+            <colgroup>
+                <col class="vzebra-even" span="2" />
+                <col class="vzebra-odd" />
+                <col class="vzebra-even" />
+                <col class="vzebra-odd" />
+            </colgroup>
+            <thead>
+                <tr>
+                    <th>test</th>
+                    <th>test</th>
+                    <th>test</th>
+                    <th>test</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>显示数据</td>
+                    <td>显示数据</td>
+                    <td>显示数据</td>
+                    <td>显示数据</td>
+                </tr>
+                <tr>
+                    <td>显示数据</td>
+                    <td>显示数据</td>
+                    <td>显示数据</td>
+                    <td>显示数据</td>
+                </tr>
+            </tbody>
+            <tfoot>
+                <td>总计：</td>
+                <td>155,101,00</td>
+                <td>155,101,00</td>
+                <td>155,101,00</td>
+            </tfoot>
+        </table>
+    </body>
+</html>
